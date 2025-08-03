@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giờ sao</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      /* CSS cho hiệu ứng lật thẻ */
+      .flashcard-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+      }
+      .flashcard.flipped .flashcard-inner {
+        transform: rotateY(180deg);
+      }
+      .flashcard-front,
+      .flashcard-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 0.5rem;
+      }
+      .flashcard-back {
+        transform: rotateY(180deg);
+      }
+      .nav-button.active {
+        background-color: #3b82f6; /* blue-500 */
+        color: white;
+      }
+      .quiz-option:hover {
+        background-color: #eff6ff; /* blue-50 */
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+      <!-- TIÊU ĐỀ -->
+      <header class="text-center mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-blue-600">
+          Mai thi đó troi
+        </h1>
+        <p class="text-gray-600 mt-2">Ai cuu toi di!</p>
+      </header>
+
+      <!-- THANH ĐIỀU HƯỚNG -->
+      <nav
+        class="bg-white rounded-lg shadow-md p-2 mb-8 flex flex-wrap justify-center gap-2"
+      >
+        <button
+          onclick="showPage('home')"
+          class="nav-button active text-sm md:text-base font-medium px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white transition-colors duration-300"
+        >
+          Trang chủ
+        </button>
+        <button
+          onclick="showPage('unit9')"
+          class="nav-button text-sm md:text-base font-medium px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white transition-colors duration-300"
+        >
+          Unit 9
+        </button>
+        <button
+          onclick="showPage('unit11')"
+          class="nav-button text-sm md:text-base font-medium px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white transition-colors duration-300"
+        >
+          Unit 11
+        </button>
+        <button
+          onclick="showPage('grammar')"
+          class="nav-button text-sm md:text-base font-medium px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white transition-colors duration-300"
+        >
+          Ngữ pháp
+        </button>
+        <button
+          onclick="showPage('pronunciation')"
+          class="nav-button text-sm md:text-base font-medium px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white transition-colors duration-300"
+        >
+          Phát âm
+        </button>
+        <button
+          onclick="showPage('practice')"
+          class="nav-button text-sm md:text-base font-medium px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white transition-colors duration-300 bg-green-500 text-white"
+        >
+          Bài tập tổng hợp
+        </button>
+      </nav>
+
+      <!-- NỘI DUNG CÁC TRANG -->
+      <main id="content-container">
+        <!-- Trang Chủ -->
+        <div id="home" class="page bg-white p-6 rounded-lg shadow-md">
+          <h2 class="text-2xl font-bold text-gray-700 mb-4">Chào mừng bạn!</h2>
+          <p>
+            Hãy chọn một bài học (Unit) hoặc mục "Bài tập tổng hợp" từ thanh
+            điều hướng để bắt đầu.
+          </p>
+          <p class="mt-2">Trang web này có các tính năng sau:</p>
+          <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1">
+            <li>
+              <strong>Flashcard Từ vựng:</strong> Nhấn vào thẻ để lật xem nghĩa.
+            </li>
+            <li>
+              <strong>Bài tập Ngữ pháp:</strong> Điền vào chỗ trống và kiểm tra
+              đáp án.
+            </li>
+            <li>
+              <strong>Bài tập Trắc nghiệm:</strong> Chọn đáp án đúng để củng cố
+              kiến thức.
+            </li>
+          </ul>
+          <div
+            class="mt-6 p-4 bg-green-50 border-l-4 border-green-400 text-green-700 rounded-r-lg"
+          >
+            <p>
+              <strong class="font-semibold">Mới:</strong> Thử ngay mục "Bài tập
+              tổng hợp" để kiểm tra kiến thức toàn diện!
+            </p>
+          </div>
+        </div>
+
+        <!-- Unit 9 -->
+        <div id="unit9" class="page hidden bg-white p-6 rounded-lg shadow-md">
+          <h2 class="text-2xl font-bold text-gray-700 mb-4">
+            Unit 9: Famous Face - Thì Quá khứ đơn
+          </h2>
+          <h3 class="text-xl font-semibold text-blue-600 mb-3">
+            1. Từ vựng: Flashcards
+          </h3>
+          <div
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+            id="vocab-unit9"
+          ></div>
+          <h3 class="text-xl font-semibold text-blue-600 mt-8 mb-3">
+            2. Ngữ pháp: The Past Simple Tense
+          </h3>
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <!-- Nội dung ngữ pháp -->
+          </div>
+          <h3 class="text-xl font-semibold text-blue-600 mt-8 mb-3">
+            3. Bài tập: Chia động từ
+          </h3>
+          <div class="space-y-4" id="quiz-unit9"></div>
+        </div>
+
+        <!-- Unit 11 -->
+        <div id="unit11" class="page hidden bg-white p-6 rounded-lg shadow-md">
+          <h2 class="text-2xl font-bold text-gray-700 mb-4">
+            Unit 11: Having Fun - Động từ Yêu/Ghét
+          </h2>
+          <h3 class="text-xl font-semibold text-blue-600 mb-3">
+            1. Từ vựng: Flashcards
+          </h3>
+          <div
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+            id="vocab-unit11"
+          ></div>
+          <h3 class="text-xl font-semibold text-blue-600 mt-8 mb-3">
+            2. Ngữ pháp: Verbs of Liking/Hating + V-ing
+          </h3>
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <!-- Nội dung ngữ pháp -->
+          </div>
+          <h3 class="text-xl font-semibold text-blue-600 mt-8 mb-3">
+            3. Bài tập: Chia động từ
+          </h3>
+          <div class="space-y-4" id="quiz-unit11"></div>
+        </div>
+
+        <!-- Ngữ pháp chung -->
+        <div id="grammar" class="page hidden bg-white p-6 rounded-lg shadow-md">
+          <h2 class="text-2xl font-bold text-gray-700 mb-4">
+            Tổng hợp Ngữ pháp
+          </h2>
+          <h3 class="text-xl font-semibold text-blue-600 mt-6 mb-3">
+            Bảng các loại Đại từ (Pronouns)
+          </h3>
+          <div class="overflow-x-auto"><!-- Bảng đại từ --></div>
+        </div>
+
+        <!-- Phát âm -->
+        <div
+          id="pronunciation"
+          class="page hidden bg-white p-6 rounded-lg shadow-md"
+        >
+          <h2 class="text-2xl font-bold text-gray-700 mb-4">
+            Luyện Phát âm: Đuôi "-ed"
+          </h2>
+          <div class="space-y-4"><!-- Nội dung phát âm --></div>
+        </div>
+
+        <!-- Bài tập tổng hợp -->
+        <div
+          id="practice"
+          class="page hidden bg-white p-6 rounded-lg shadow-md"
+        >
+          <h2 class="text-2xl font-bold text-gray-700 mb-4">
+            Bài tập tổng hợp
+          </h2>
+          <p class="mb-6 text-gray-600">
+            Chọn đáp án đúng nhất để hoàn thành các câu sau.
+          </p>
+          <div class="space-y-6" id="practice-quiz-container">
+            <!-- Câu hỏi trắc nghiệm tổng hợp sẽ được JS chèn vào đây -->
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // --- DỮ LIỆU TỪ VỰNG VÀ BÀI TẬP ---
+      const vocabData = {
+        unit9: [
+          { en: "year", vi: "năm" },
+          { en: "collect stamps", vi: "sưu tầm tem" },
+          { en: "design a building", vi: "thiết kế toà nhà" },
+          { en: "travel to the city", vi: "du lịch thành phố" },
+          { en: "paint a picture", vi: "vẽ tranh" },
+          { en: "receive a present", vi: "nhận quà" },
+          { en: "hero", vi: "anh hùng" },
+          { en: "character", vi: "nhân vật" },
+          { en: "decide", vi: "quyết định" },
+          { en: "discover", vi: "khám phá" },
+          { en: "scientist", vi: "nhà khoa học" },
+          { en: "mathematician", vi: "nhà toán học" },
+        ],
+        unit11: [
+          { en: "stay in", vi: "ở trong nhà" },
+          { en: "go out", vi: "đi ra ngoài" },
+          { en: "relax", vi: "thư giãn" },
+          { en: "leisure activities", vi: "hoạt động giải trí" },
+          { en: "go to the concert", vi: "đi xem hoà nhạc" },
+          { en: "find out", vi: "tìm ra" },
+          { en: "take out food", vi: "mua đồ ăn mang đi" },
+          { en: "stadium", vi: "sân vận động" },
+          { en: "wait for", vi: "đợi chờ" },
+          { en: "player", vi: "cầu thủ" },
+          { en: "be interested in", vi: "thích thú, quan tâm" },
+          { en: "hate", vi: "ghét" },
+        ],
+      };
+
+      const quizData = {
+        unit9: [
+          {
+            sentence: "I (visit) _______ my grandparents last week.",
+            answer: "visited",
+          },
+          {
+            sentence: "She (not watch) _______ TV yesterday.",
+            answer: "didn't watch",
+          },
+          {
+            sentence: "They (be) _______ very happy with the gift.",
+            answer: "were",
+          },
+          {
+            sentence: "What (you do) _______ last night?",
+            answer: "did you do",
+          },
+          {
+            sentence: "He (study) _______ hard for the exam.",
+            answer: "studied",
+          },
+        ],
+        unit11: [
+          {
+            sentence: "We enjoy (listen) _______ to music.",
+            answer: "listening",
+          },
+          { sentence: "He hates (do) _______ the housework.", answer: "doing" },
+          { sentence: "Do you like (play) _______ soccer?", answer: "playing" },
+          {
+            sentence: "My sister loves (read) _______ comic books.",
+            answer: "reading",
+          },
+        ],
+      };
+
+      // Dữ liệu cho bài tập trắc nghiệm tổng hợp
+      const practiceQuizData = [
+        {
+          question: "A person who studies science is called a ______.",
+          options: ["mathematician", "scientist", "player", "hero"],
+          answer: "scientist",
+        },
+        {
+          question: "My brother loves _______ computer games in his free time.",
+          options: ["play", "to play", "playing", "played"],
+          answer: "playing",
+        },
+        {
+          question: "Christopher Columbus _______ America in 1492.",
+          options: ["discover", "discovered", "discovers", "was discovering"],
+          answer: "discovered",
+        },
+        {
+          question: "Could you _______ for me for a few minutes?",
+          options: ["wait", "waiting", "to wait", "waited"],
+          answer: "wait",
+        },
+        {
+          question:
+            "I don't have much money, so I can't _______ that expensive car.",
+          options: ["buy", "sell", "relax", "find out"],
+          answer: "buy",
+        },
+        {
+          question: "What time _______ you go to bed last night?",
+          options: ["did", "do", "were", "was"],
+          answer: "did",
+        },
+        {
+          question: "This book is not mine. It's _______.",
+          options: ["her", "she", "hers", "my"],
+          answer: "hers",
+        },
+        {
+          question: "Let's _______ and watch a movie at the cinema.",
+          options: ["stay in", "go out", "take out", "find out"],
+          answer: "go out",
+        },
+      ];
+
+      // --- HÀM TẠO GIAO DIỆN ---
+
+      function createFlashcard(word) {
+        /* ... */
+      }
+      function createQuizQuestion(question, index) {
+        /* ... */
+      }
+
+      // Hàm tạo một câu hỏi trắc nghiệm tổng hợp
+      function createPracticeQuestion(data, index) {
+        const container = document.createElement("div");
+        container.className =
+          "practice-question bg-gray-50 p-4 rounded-lg shadow-sm";
+
+        const questionText = document.createElement("p");
+        questionText.className = "font-semibold mb-3";
+        questionText.textContent = `${index + 1}. ${data.question}`;
+        container.appendChild(questionText);
+
+        const optionsContainer = document.createElement("div");
+        optionsContainer.className = "space-y-2";
+        container.appendChild(optionsContainer);
+
+        const feedback = document.createElement("p");
+        feedback.className = "mt-3 font-medium text-sm";
+        container.appendChild(feedback);
+
+        data.options.forEach((option) => {
+          const optionLabel = document.createElement("label");
+          optionLabel.className =
+            "block p-3 rounded-md border border-gray-200 cursor-pointer quiz-option transition-colors duration-200";
+
+          const optionInput = document.createElement("input");
+          optionInput.type = "radio";
+          optionInput.name = `question-${index}`;
+          optionInput.value = option;
+          optionInput.className = "mr-3";
+
+          optionInput.addEventListener("change", () => {
+            // Xóa hết các background màu trước đó
+            optionsContainer.querySelectorAll("label").forEach((lbl) => {
+              lbl.classList.remove(
+                "bg-green-200",
+                "border-green-400",
+                "bg-red-200",
+                "border-red-400"
+              );
+            });
+
+            if (optionInput.value === data.answer) {
+              optionLabel.classList.add("bg-green-200", "border-green-400");
+              feedback.textContent = "Chính xác! Tuyệt vời!";
+              feedback.className = "mt-3 font-medium text-sm text-green-700";
+            } else {
+              optionLabel.classList.add("bg-red-200", "border-red-400");
+              feedback.textContent = `Chưa đúng. Đáp án đúng là "${data.answer}".`;
+              feedback.className = "mt-3 font-medium text-sm text-red-700";
+            }
+          });
+
+          optionLabel.appendChild(optionInput);
+          optionLabel.appendChild(document.createTextNode(option));
+          optionsContainer.appendChild(optionLabel);
+        });
+
+        return container;
+      }
+
+      // --- HÀM KHỞI TẠO VÀ ĐIỀU KHIỂN ---
+
+      function showPage(pageId) {
+        document
+          .querySelectorAll(".page")
+          .forEach((p) => p.classList.add("hidden"));
+        document.getElementById(pageId).classList.remove("hidden");
+        document.querySelectorAll(".nav-button").forEach((b) => {
+          b.classList.remove("active");
+          if (b.getAttribute("onclick").includes(`'${pageId}'`)) {
+            b.classList.add("active");
+          }
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // Copy nội dung tĩnh vào các trang để không lặp lại code HTML
+        // (Trong một ứng dụng thực tế, có thể dùng template engine)
+        document.querySelector("#unit9 .bg-gray-50").innerHTML =
+          document.querySelector(
+            "#tieng-anh-on-thi-app-template-grammar-unit9"
+          ).innerHTML;
+        document.querySelector("#unit11 .bg-gray-50").innerHTML =
+          document.querySelector(
+            "#tieng-anh-on-thi-app-template-grammar-unit11"
+          ).innerHTML;
+        document.querySelector("#grammar .overflow-x-auto").innerHTML =
+          document.querySelector(
+            "#tieng-anh-on-thi-app-template-grammar-table"
+          ).innerHTML;
+        document.querySelector("#pronunciation .space-y-4").innerHTML =
+          document.querySelector(
+            "#tieng-anh-on-thi-app-template-pronunciation"
+          ).innerHTML;
+
+        // Tạo flashcards
+        const vocabContainer9 = document.getElementById("vocab-unit9");
+        vocabData.unit9.forEach((word) =>
+          vocabContainer9.appendChild(createFlashcard(word))
+        );
+
+        const vocabContainer11 = document.getElementById("vocab-unit11");
+        vocabData.unit11.forEach((word) =>
+          vocabContainer11.appendChild(createFlashcard(word))
+        );
+
+        // Tạo câu hỏi quiz điền từ
+        const quizContainer9 = document.getElementById("quiz-unit9");
+        quizData.unit9.forEach((q, index) =>
+          quizContainer9.appendChild(createQuizQuestion(q, index))
+        );
+
+        const quizContainer11 = document.getElementById("quiz-unit11");
+        quizData.unit11.forEach((q, index) =>
+          quizContainer11.appendChild(createQuizQuestion(q, index))
+        );
+
+        // Tạo câu hỏi trắc nghiệm tổng hợp
+        const practiceContainer = document.getElementById(
+          "practice-quiz-container"
+        );
+        practiceQuizData.forEach((q, index) =>
+          practiceContainer.appendChild(createPracticeQuestion(q, index))
+        );
+
+        showPage("home");
+      });
+
+      // Tái sử dụng các hàm đã có
+      // Hàm tạo một thẻ flashcard
+      function createFlashcard(word) {
+        const card = document.createElement("div");
+        card.className =
+          "flashcard bg-white shadow rounded-lg cursor-pointer h-32";
+        card.style.perspective = "1000px";
+
+        const cardInner = document.createElement("div");
+        cardInner.className = "flashcard-inner";
+
+        const cardFront = document.createElement("div");
+        cardFront.className = "flashcard-front bg-blue-100 text-blue-800 p-2";
+        cardFront.innerHTML = `<span class="font-semibold text-lg">${word.en}</span>`;
+
+        const cardBack = document.createElement("div");
+        cardBack.className = "flashcard-back bg-green-100 text-green-800 p-2";
+        cardBack.innerHTML = `<span class="font-semibold text-lg">${word.vi}</span>`;
+
+        cardInner.appendChild(cardFront);
+        cardInner.appendChild(cardBack);
+        card.appendChild(cardInner);
+
+        card.addEventListener("click", () => {
+          card.classList.toggle("flipped");
+        });
+
+        return card;
+      }
+
+      // Hàm tạo một câu hỏi quiz
+      function createQuizQuestion(question, index) {
+        const container = document.createElement("div");
+        container.className = "quiz-question bg-gray-50 p-4 rounded-lg";
+
+        const questionText = document.createElement("p");
+        questionText.textContent = `${index + 1}. ${question.sentence}`;
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className =
+          "mt-2 w-full md:w-1/2 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500";
+        input.placeholder = "Nhập câu trả lời...";
+
+        const button = document.createElement("button");
+        button.textContent = "Kiểm tra";
+        button.className =
+          "ml-0 md:ml-2 mt-2 md:mt-0 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition";
+
+        const feedback = document.createElement("p");
+        feedback.className = "mt-2 font-medium";
+
+        button.addEventListener("click", () => {
+          if (
+            input.value.trim().toLowerCase() === question.answer.toLowerCase()
+          ) {
+            feedback.textContent = "Chính xác!";
+            feedback.className = "mt-2 font-medium text-green-600";
+          } else {
+            feedback.textContent = `Sai rồi! Đáp án đúng là: ${question.answer}`;
+            feedback.className = "mt-2 font-medium text-red-600";
+          }
+        });
+
+        container.appendChild(questionText);
+        container.appendChild(input);
+        container.appendChild(button);
+        container.appendChild(feedback);
+
+        return container;
+      }
+    </script>
+
+    <!-- Templates for static content to avoid repetition in JS -->
+    <template id="tieng-anh-on-thi-app-template-grammar-unit9">
+      <p class="font-semibold">Công dụng:</p>
+      <p class="mb-4">Diễn tả hành động đã xảy ra và kết thúc trong quá khứ.</p>
+      <p class="font-semibold">Cấu trúc với Động từ "tobe":</p>
+      <ul class="list-disc list-inside space-y-1">
+        <li><strong>Khẳng định (+):</strong> S + was/were + O</li>
+        <li><strong>Phủ định (-):</strong> S + wasn't/weren't + O</li>
+        <li><strong>Nghi vấn (?):</strong> Was/Were + S + O?</li>
+      </ul>
+      <p class="font-semibold mt-4">Cấu trúc với Động từ thường:</p>
+      <ul class="list-disc list-inside space-y-1">
+        <li><strong>Khẳng định (+):</strong> S + V-ed/V2</li>
+        <li><strong>Phủ định (-):</strong> S + didn't + V (nguyên mẫu)</li>
+        <li><strong>Nghi vấn (?):</strong> Did + S + V (nguyên mẫu)?</li>
+      </ul>
+    </template>
+    <template id="tieng-anh-on-thi-app-template-grammar-unit11">
+      <p class="font-semibold">Công dụng:</p>
+      <p class="mb-4">
+        Sử dụng dạng V-ing (danh động từ) sau các động từ chỉ sự yêu thích hoặc
+        ghét.
+      </p>
+      <p class="font-semibold">Cấu trúc:</p>
+      <p class="text-lg font-mono bg-gray-200 p-2 rounded text-center">
+        love / like / enjoy / hate + V-ing
+      </p>
+    </template>
+    <template id="tieng-anh-on-thi-app-template-grammar-table">
+      <table class="min-w-full bg-white border border-gray-200 text-center">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="py-2 px-4 border-b">Subject</th>
+            <th class="py-2 px-4 border-b">Object</th>
+            <th class="py-2 px-4 border-b">Possessive Adjective</th>
+            <th class="py-2 px-4 border-b">Possessive Pronouns</th>
+            <th class="py-2 px-4 border-b">Reflexive Pronouns</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border px-4 py-2">I</td>
+            <td class="border px-4 py-2">me</td>
+            <td class="border px-4 py-2">my</td>
+            <td class="border px-4 py-2">mine</td>
+            <td class="border px-4 py-2">myself</td>
+          </tr>
+          <tr>
+            <td class="border px-4 py-2">you</td>
+            <td class="border px-4 py-2">you</td>
+            <td class="border px-4 py-2">your</td>
+            <td class="border px-4 py-2">yours</td>
+            <td class="border px-4 py-2">yourself</td>
+          </tr>
+          <tr>
+            <td class="border px-4 py-2">he</td>
+            <td class="border px-4 py-2">him</td>
+            <td class="border px-4 py-2">his</td>
+            <td class="border px-4 py-2">his</td>
+            <td class="border px-4 py-2">himself</td>
+          </tr>
+          <tr>
+            <td class="border px-4 py-2">she</td>
+            <td class="border px-4 py-2">her</td>
+            <td class="border px-4 py-2">her</td>
+            <td class="border px-4 py-2">hers</td>
+            <td class="border px-4 py-2">herself</td>
+          </tr>
+          <tr>
+            <td class="border px-4 py-2">it</td>
+            <td class="border px-4 py-2">it</td>
+            <td class="border px-4 py-2">its</td>
+            <td class="border px-4 py-2">-</td>
+            <td class="border px-4 py-2">itself</td>
+          </tr>
+          <tr>
+            <td class="border px-4 py-2">we</td>
+            <td class="border px-4 py-2">us</td>
+            <td class="border px-4 py-2">our</td>
+            <td class="border px-4 py-2">ours</td>
+            <td class="border px-4 py-2">ourselves</td>
+          </tr>
+          <tr>
+            <td class="border px-4 py-2">you</td>
+            <td class="border px-4 py-2">you</td>
+            <td class="border px-4 py-2">your</td>
+            <td class="border px-4 py-2">yours</td>
+            <td class="border px-4 py-2">yourselves</td>
+          </tr>
+          <tr>
+            <td class="border px-4 py-2">they</td>
+            <td class="border px-4 py-2">them</td>
+            <td class="border px-4 py-2">their</td>
+            <td class="border px-4 py-2">theirs</td>
+            <td class="border px-4 py-2">themselves</td>
+          </tr>
+        </tbody>
+      </table>
+    </template>
+    <template id="tieng-anh-on-thi-app-template-pronunciation">
+      <div class="p-4 bg-green-50 border-l-4 border-green-400 rounded-r-lg">
+        <h4 class="font-bold text-lg">Phát âm là /ɪd/</h4>
+        <p>Khi động từ kết thúc bằng âm /t/ hoặc /d/.</p>
+        <p class="font-mono text-gray-700 mt-1">
+          Ví dụ: wanted, needed, decided
+        </p>
+      </div>
+      <div class="p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded-r-lg">
+        <h4 class="font-bold text-lg">Phát âm là /t/</h4>
+        <p>
+          Khi động từ kết thúc bằng các âm vô thanh: /p/, /k/, /f/, /s/, /ʃ/
+          (sh), /tʃ/ (ch).
+        </p>
+        <p class="font-mono text-gray-700 mt-1">
+          Ví dụ: helped, looked, washed, watched, stopped
+        </p>
+      </div>
+      <div class="p-4 bg-purple-50 border-l-4 border-purple-400 rounded-r-lg">
+        <h4 class="font-bold text-lg">Phát âm là /d/</h4>
+        <p>Với các trường hợp còn lại (các âm hữu thanh).</p>
+        <p class="font-mono text-gray-700 mt-1">
+          Ví dụ: played, opened, loved, studied
+        </p>
+      </div>
+    </template>
+  </body>
+</html>
