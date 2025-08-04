@@ -52,7 +52,6 @@
   </head>
   <body class="bg-gray-100 text-gray-800">
     <div class="container mx-auto p-4 md:p-8 max-w-5xl">
-      <!-- TIÊU ĐỀ -->
       <header class="text-center mb-8">
         <h1 class="text-3xl md:text-4xl font-bold text-blue-600">
           Trang Web Ôn Thi Tiếng Anh
@@ -62,7 +61,6 @@
         </p>
       </header>
 
-      <!-- THANH ĐIỀU HƯỚNG -->
       <nav
         class="bg-white rounded-lg shadow-md p-2 mb-8 flex flex-wrap justify-center gap-2"
       >
@@ -100,30 +98,27 @@
           onclick="showPage('practice')"
           class="nav-button text-sm md:text-base font-medium px-4 py-2 rounded-md hover:bg-green-500 hover:bg-green-600 transition-colors duration-300 bg-green-500 text-white"
         >
-          Bài tập
+          Bài tập lớn
         </button>
       </nav>
 
-      <!-- NỘI DUNG CÁC TRANG -->
       <main id="content-container">
-        <!-- Trang Chủ -->
         <div id="home" class="page bg-white p-6 rounded-lg shadow-md">
           <h2 class="text-2xl font-bold text-gray-700 mb-4">Chào mừng bạn!</h2>
           <p>
-            Hãy chọn một bài học (Unit) hoặc mục "Bài tập" từ thanh điều hướng
-            để bắt đầu.
+            Hãy chọn một bài học (Unit) hoặc mục "Bài tập lớn" từ thanh điều
+            hướng để bắt đầu.
           </p>
           <div
-            class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400 text-blue-700 rounded-r-lg"
+            class="mt-6 p-4 bg-green-50 border-l-4 border-green-400 text-green-700 rounded-r-lg"
           >
             <p>
-              <strong class="font-semibold">Cập nhật:</strong> Đã bổ sung đầy đủ
-              nội dung cho Unit 10 và Unit 12!
+              <strong class="font-semibold">Cập nhật:</strong> Mục "Bài tập lớn"
+              đã được thêm rất nhiều câu hỏi mới để bạn thỏa sức luyện tập!
             </p>
           </div>
         </div>
 
-        <!-- Unit 9 -->
         <div id="unit9" class="page hidden bg-white p-6 rounded-lg shadow-md">
           <h2 class="text-2xl font-bold text-gray-700 mb-4">
             Unit 9: Famous Face - Thì Quá khứ đơn
@@ -139,7 +134,6 @@
           <div class="space-y-4" id="quiz-unit9"></div>
         </div>
 
-        <!-- Unit 10 -->
         <div id="unit10" class="page hidden bg-white p-6 rounded-lg shadow-md">
           <h2 class="text-2xl font-bold text-gray-700 mb-4">
             Unit 10: It's History - Động từ bất quy tắc
@@ -155,7 +149,6 @@
           <div class="space-y-4" id="quiz-unit10"></div>
         </div>
 
-        <!-- Unit 11 -->
         <div id="unit11" class="page hidden bg-white p-6 rounded-lg shadow-md">
           <h2 class="text-2xl font-bold text-gray-700 mb-4">
             Unit 11: Having Fun - Động từ Yêu/Ghét
@@ -171,10 +164,9 @@
           <div class="space-y-4" id="quiz-unit11"></div>
         </div>
 
-        <!-- Unit 12 -->
         <div id="unit12" class="page hidden bg-white p-6 rounded-lg shadow-md">
           <h2 class="text-2xl font-bold text-gray-700 mb-4">
-            Unit 12: Going Away - Du lịch
+            Unit 12: Going Away - Du lịch & Hiện tại tiếp diễn
           </h2>
           <h3 class="text-xl font-semibold text-blue-600 mb-3">1. Từ vựng</h3>
           <div
@@ -182,18 +174,21 @@
             id="vocab-unit12"
           ></div>
           <h3 class="text-xl font-semibold text-blue-600 mt-8 mb-3">
-            2. Bài tập: Chọn từ đúng
+            2. Ngữ pháp & Phân biệt thì
+          </h3>
+          <div class="bg-gray-50 p-4 rounded-lg space-y-4"></div>
+          <h3 class="text-xl font-semibold text-blue-600 mt-8 mb-3">
+            3. Bài tập: Chọn từ đúng
           </h3>
           <div class="space-y-6" id="quiz-unit12"></div>
         </div>
 
-        <!-- Bài tập tổng hợp -->
         <div
           id="practice"
           class="page hidden bg-white p-6 rounded-lg shadow-md"
         >
           <h2 class="text-2xl font-bold text-gray-700 mb-4">
-            Bài tập tổng hợp
+            Bài Kiểm Tra Tổng Hợp (20+ câu)
           </h2>
           <p class="mb-6 text-gray-600">
             Chọn đáp án đúng nhất để hoàn thành các câu sau.
@@ -204,7 +199,7 @@
               onclick="resetPracticeQuiz()"
               class="bg-indigo-500 text-white font-semibold px-6 py-2 rounded-lg hover:bg-indigo-600 transition-colors"
             >
-              Làm lại bài
+              Làm lại bài kiểm tra
             </button>
           </div>
         </div>
@@ -293,61 +288,141 @@
         ],
       };
 
+      // BÀI KIỂM TRA TỔNG HỢP MỚI VỚI NHIỀU CÂU HỎI
       const practiceQuizData = [
-        // Dữ liệu cũ
+        // Unit 9: Past Simple (was/were, V-ed)
         {
-          question: "A person who studies science is called a ______.",
-          options: ["mathematician", "scientist", "player", "hero"],
-          answer: "scientist",
+          question: "My friends _______ at the party last night.",
+          options: ["was", "is", "were", "are"],
+          answer: "were",
         },
         {
-          question: "My brother loves _______ computer games in his free time.",
-          options: ["play", "to play", "playing", "played"],
-          answer: "playing",
+          question: "I _______ stamps when I was a child.",
+          options: ["collect", "collected", "am collecting", "collects"],
+          answer: "collected",
         },
         {
-          question: "Christopher Columbus _______ America in 1492.",
-          options: ["discover", "discovered", "discovers", "was discovering"],
-          answer: "discovered",
+          question: "She _______ to our question; she just smiled.",
+          options: [
+            "didn't answer",
+            "not answer",
+            "don't answer",
+            "answered not",
+          ],
+          answer: "didn't answer",
         },
+        // Unit 10: Past Simple (irregular verbs), vocab
         {
-          question: "What time _______ you go to bed last night?",
-          options: ["did", "do", "were", "was"],
-          answer: "did",
-        },
-        {
-          question: "This book is not mine. It's _______.",
-          options: ["her", "she", "hers", "my"],
-          answer: "hers",
-        },
-        // Thêm câu hỏi mới từ Unit 10 & 12
-        {
-          question:
-            "We were stuck in a _______ for an hour on the way to the airport.",
-          options: ["luggage", "passport", "traffic jam", "vacation"],
-          answer: "traffic jam",
-        },
-        {
-          question:
-            "They _______ a beautiful new bridge across the river last year.",
-          options: ["build", "built", "building", "builds"],
+          question: "The ancient Egyptians _______ the great pyramids.",
+          options: ["build", "built", "have built", "are building"],
           answer: "built",
         },
         {
-          question:
-            "Don't forget to bring your _______ when you travel internationally.",
-          options: ["wallet", "suitcase", "passport", "money"],
-          answer: "passport",
-        },
-        {
-          question: "I can't find my keys. I think I _______ them.",
-          options: ["lose", "lost", "found", "find"],
+          question: "He _______ his wallet on the bus yesterday.",
+          options: ["loses", "lost", "is losing", "has lost"],
           answer: "lost",
         },
         {
-          question: "If we don't leave now, we will _______ the train.",
-          options: ["take", "on time", "miss", "go on"],
-          answer: "miss",
+          question: "A _______ is a very old and valuable thing from history.",
+          options: ["banknote", "project", "object", "chariot"],
+          answer: "object",
+        },
+        {
+          question:
+            "The ancient Roman _______ was one of the most powerful in history.",
+          options: ["empire", "stadium", "metal", "player"],
+          answer: "empire",
+        },
+        // Unit 11: V-ing, vocab
+        {
+          question: "I really enjoy _______ sports with my friends.",
+          options: ["to watch", "watch", "watching", "watched"],
+          answer: "watching",
+        },
+        {
+          question: "He is a famous football _______ for the national team.",
+          options: ["player", "scientist", "hero", "character"],
+          answer: "player",
+        },
+        {
+          question: "What kind of _______ do you do in your free time?",
+          options: [
+            "take out food",
+            "leisure activities",
+            "go out",
+            "find out",
+          ],
+          answer: "leisure activities",
+        },
+        {
+          question: "My sister hates _______ up early on weekends.",
+          options: ["get", "to get", "getting", "got"],
+          answer: "getting",
+        },
+        // Unit 12: Present Continuous, vocab
+        {
+          question: "Please be quiet. I _______ to the radio.",
+          options: ["listen", "listened", "am listening", "was listening"],
+          answer: "am listening",
+        },
+        {
+          question: "Look! That man _______ to open your car door!",
+          options: ["tries", "tried", "is trying", "was trying"],
+          answer: "is trying",
+        },
+        {
+          question:
+            "You must show your _______ before you can get on the plane.",
+          options: ["passport", "luggage", "suitcase", "credit card"],
+          answer: "passport",
+        },
+        {
+          question:
+            "The traffic is terrible. I'm afraid we won't arrive _______.",
+          options: ["in time", "at time", "on time", "of time"],
+          answer: "on time",
+        },
+        // General Grammar & Mixed Questions
+        {
+          question: "_______ you see the new action movie last Friday?",
+          options: ["Do", "Did", "Are", "Were"],
+          answer: "Did",
+        },
+        {
+          question: "This isn't my bag. It must be _______.",
+          options: ["her", "she", "hers", "she's"],
+          answer: "hers",
+        },
+        {
+          question: "Could you pass _______ the salt, please?",
+          options: ["I", "my", "me", "mine"],
+          answer: "me",
+        },
+        {
+          question: "My mother _______ dinner in the kitchen right now.",
+          options: ["cooks", "cooked", "is cooking", "was cooking"],
+          answer: "is cooking",
+        },
+        {
+          question: "Leonardo da Vinci _______ the Mona Lisa.",
+          options: ["paints", "painted", "is painting", "has painted"],
+          answer: "painted",
+        },
+        {
+          question: "I have too much _______ to carry by myself. Can you help?",
+          options: ["wallet", "passport", "luggage", "traffic"],
+          answer: "luggage",
+        },
+        {
+          question:
+            "He _______ for his keys for 10 minutes and finally _______ them under the bed.",
+          options: [
+            "looked / found",
+            "looked / finded",
+            "was looking / find",
+            "looked / was finding",
+          ],
+          answer: "looked / found",
         },
       ];
 
