@@ -3,619 +3,463 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ôn Thi Tiếng Anh</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <title>Thời Khóa Biểu Linh Hoạt</title>
     <style>
+      /* --- CSS Styling (Light Theme) --- */
+      :root {
+        --primary-bg: #f4f7f6;
+        --secondary-bg: #ffffff;
+        --header-bg: #007bff;
+        --text-color: #333333;
+        --accent-color: #007bff;
+        --border-color: #e9ecef;
+        --hover-bg: #e2e6ea;
+        --current-day-bg: #28a745;
+      }
+
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
       body {
-        font-family: "Inter", sans-serif;
-      }
-      .flashcard-inner {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        transition: transform 0.6s;
-        transform-style: preserve-3d;
-      }
-      .flashcard.flipped .flashcard-inner {
-        transform: rotateY(180deg);
-      }
-      .flashcard-front,
-      .flashcard-back {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
+        font-family: "Roboto", sans-serif;
+        background-color: var(--primary-bg);
+        color: var(--text-color);
+        margin: 0;
+        padding: 20px;
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: 0.5rem;
+        min-height: 100vh;
       }
-      .flashcard-back {
-        transform: rotateY(180deg);
+
+      .calendar-container {
+        width: 95%;
+        max-width: 1100px;
+        background-color: var(--secondary-bg);
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
       }
-      .nav-button.active {
-        background-color: #3b82f6; /* blue-500 */
+
+      .calendar-header {
+        background-color: var(--header-bg);
         color: white;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
-      .quiz-option:hover {
-        background-color: #eff6ff; /* blue-50 */
+
+      .calendar-header h1 {
+        margin: 0;
+        font-size: 1.8em;
+        white-space: nowrap;
+      }
+
+      .month-selector {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .month-selector button {
+        background: none;
+        border: 2px solid white;
+        color: white;
+        font-size: 1.5em;
+        cursor: pointer;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.2s;
+      }
+
+      .month-selector button:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .month-selector select {
+        padding: 8px;
+        border-radius: 5px;
+        border: none;
+        font-size: 1em;
+        background-color: white;
+        color: var(--text-color);
+      }
+
+      .calendar-body {
+        padding: 10px;
+      }
+
+      .calendar-weekdays,
+      .calendar-days {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+      }
+
+      .day-name {
+        text-align: center;
+        padding: 15px 10px;
+        font-weight: 700;
+        color: var(--accent-color);
+      }
+
+      .day {
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        min-height: 90px;
+        padding: 8px;
+        position: relative;
+        font-size: 1em;
+      }
+
+      .day:hover {
+        background-color: var(--hover-bg);
+      }
+
+      .day.empty {
+        background-color: #f8f9fa;
+        cursor: default;
+      }
+
+      .day.other-month .day-number {
+        opacity: 0.4;
+      }
+
+      .day .day-number {
+        font-size: 1.2em;
+        font-weight: 500;
+      }
+
+      .day.today .day-number {
+        background-color: var(--current-day-bg);
+        color: white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .day.sunday .day-number {
+        color: #d9534f;
+      }
+
+      /* --- Modal (Cửa sổ chi tiết) --- */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal.show {
+        display: flex;
+      }
+
+      .modal-content {
+        background-color: var(--secondary-bg);
+        padding: 25px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 550px;
+        position: relative;
+        animation: fadeIn 0.3s;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .close-btn {
+        color: #aaa;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .close-btn:hover {
+        color: #d9534f;
+      }
+
+      .schedule-item {
+        display: flex;
+        margin-bottom: 15px;
+        border-left: 3px solid var(--accent-color);
+        padding-left: 15px;
+        font-size: 0.95em;
+      }
+      .schedule-item .time {
+        font-weight: bold;
+        color: var(--accent-color);
+        min-width: 120px;
+      }
+
+      #modal-title {
+        color: var(--accent-color);
+        margin-bottom: 20px;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 10px;
+      }
+
+      .notes-section {
+        margin-top: 25px;
+      }
+      .notes-section h3 {
+        color: var(--accent-color);
+      }
+
+      #notes-input {
+        width: calc(100% - 22px);
+        height: 100px;
+        background-color: #f8f9fa;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        color: var(--text-color);
+        padding: 10px;
+        font-family: inherit;
+        font-size: 1em;
       }
     </style>
   </head>
-  <body class="bg-gray-100 text-gray-800">
-    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
-      <header class="text-center mb-8">
-        <h1 class="text-3xl md:text-4xl font-bold text-blue-600">
-          Trang Web Ôn Thi Tiếng Anh
-        </h1>
-        <p class="text-gray-600 mt-2">
-          Phiên bản đầy đủ dựa trên ghi chép của bạn!
-        </p>
-      </header>
-
-      <nav
-        class="bg-white rounded-lg shadow-md p-2 mb-8 flex flex-wrap justify-center gap-2"
-      >
-        <button
-          onclick="showPage('home')"
-          class="nav-button active text-sm md:text-base font-medium px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white transition-colors duration-300"
-        >
-          Trang chủ
-        </button>
-        <button
-          onclick="showPage('unit9')"
-          class="nav-button text-sm md:text-base font-medium px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white transition-colors duration-300"
-        >
-          Unit 9
-        </button>
-        <button
-          onclick="showPage('unit10')"
-          class="nav-button text-sm md:text-base font-medium px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white transition-colors duration-300"
-        >
-          Unit 10
-        </button>
-        <button
-          onclick="showPage('unit11')"
-          class="nav-button text-sm md:text-base font-medium px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white transition-colors duration-300"
-        >
-          Unit 11
-        </button>
-        <button
-          onclick="showPage('unit12')"
-          class="nav-button text-sm md:text-base font-medium px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white transition-colors duration-300"
-        >
-          Unit 12
-        </button>
-        <button
-          onclick="showPage('practice')"
-          class="nav-button text-sm md:text-base font-medium px-4 py-2 rounded-md hover:bg-green-500 hover:bg-green-600 transition-colors duration-300 bg-green-500 text-white"
-        >
-          Bài tập lớn
-        </button>
-      </nav>
-
-      <main id="content-container">
-        <div id="home" class="page bg-white p-6 rounded-lg shadow-md">
-          <h2 class="text-2xl font-bold text-gray-700 mb-4">Chào mừng bạn!</h2>
-          <p>
-            Hãy chọn một bài học (Unit) hoặc mục "Bài tập lớn" từ thanh điều
-            hướng để bắt đầu.
-          </p>
-          <div
-            class="mt-6 p-4 bg-green-50 border-l-4 border-green-400 text-green-700 rounded-r-lg"
-          >
-            <p>
-              <strong class="font-semibold">Cập nhật:</strong> Mục "Bài tập lớn"
-              đã được thêm rất nhiều câu hỏi mới để bạn thỏa sức luyện tập!
-            </p>
-          </div>
+  <body>
+    <div class="calendar-container">
+      <div class="calendar-header">
+        <h1 id="month-year-display">Tháng 9, 2025</h1>
+        <div class="month-selector">
+          <button id="prev-month-btn">&lt;</button>
+          <select id="month-select"></select>
+          <select id="year-select"></select>
+          <button id="next-month-btn">&gt;</button>
         </div>
-
-        <div id="unit9" class="page hidden bg-white p-6 rounded-lg shadow-md">
-          <h2 class="text-2xl font-bold text-gray-700 mb-4">
-            Unit 9: Famous Face - Thì Quá khứ đơn
-          </h2>
-          <h3 class="text-xl font-semibold text-blue-600 mb-3">1. Từ vựng</h3>
-          <div
-            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
-            id="vocab-unit9"
-          ></div>
-          <h3 class="text-xl font-semibold text-blue-600 mt-8 mb-3">
-            2. Bài tập: Chia động từ
-          </h3>
-          <div class="space-y-4" id="quiz-unit9"></div>
+      </div>
+      <div class="calendar-body">
+        <div class="calendar-weekdays">
+          <div class="day-name">Chủ Nhật</div>
+          <div class="day-name">Thứ 2</div>
+          <div class="day-name">Thứ 3</div>
+          <div class="day-name">Thứ 4</div>
+          <div class="day-name">Thứ 5</div>
+          <div class="day-name">Thứ 6</div>
+          <div class="day-name">Thứ 7</div>
         </div>
+        <div id="calendar-days" class="calendar-days"></div>
+      </div>
+    </div>
 
-        <div id="unit10" class="page hidden bg-white p-6 rounded-lg shadow-md">
-          <h2 class="text-2xl font-bold text-gray-700 mb-4">
-            Unit 10: It's History - Động từ bất quy tắc
-          </h2>
-          <h3 class="text-xl font-semibold text-blue-600 mb-3">1. Từ vựng</h3>
-          <div
-            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
-            id="vocab-unit10"
-          ></div>
-          <h3 class="text-xl font-semibold text-blue-600 mt-8 mb-3">
-            2. Bài tập: Điền dạng quá khứ của động từ
-          </h3>
-          <div class="space-y-4" id="quiz-unit10"></div>
+    <div id="scheduleModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2 id="modal-title">Lịch trình ngày...</h2>
+        <div id="modal-body"></div>
+        <div class="notes-section">
+          <h3>Ghi chú cho ngày:</h3>
+          <textarea
+            id="notes-input"
+            placeholder="Việc cần làm, deadline, ý tưởng..."
+          ></textarea>
         </div>
-
-        <div id="unit11" class="page hidden bg-white p-6 rounded-lg shadow-md">
-          <h2 class="text-2xl font-bold text-gray-700 mb-4">
-            Unit 11: Having Fun - Động từ Yêu/Ghét
-          </h2>
-          <h3 class="text-xl font-semibold text-blue-600 mb-3">1. Từ vựng</h3>
-          <div
-            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
-            id="vocab-unit11"
-          ></div>
-          <h3 class="text-xl font-semibold text-blue-600 mt-8 mb-3">
-            2. Bài tập: Chia động từ
-          </h3>
-          <div class="space-y-4" id="quiz-unit11"></div>
-        </div>
-
-        <div id="unit12" class="page hidden bg-white p-6 rounded-lg shadow-md">
-          <h2 class="text-2xl font-bold text-gray-700 mb-4">
-            Unit 12: Going Away - Du lịch & Hiện tại tiếp diễn
-          </h2>
-          <h3 class="text-xl font-semibold text-blue-600 mb-3">1. Từ vựng</h3>
-          <div
-            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
-            id="vocab-unit12"
-          ></div>
-          <h3 class="text-xl font-semibold text-blue-600 mt-8 mb-3">
-            2. Ngữ pháp & Phân biệt thì
-          </h3>
-          <div class="bg-gray-50 p-4 rounded-lg space-y-4"></div>
-          <h3 class="text-xl font-semibold text-blue-600 mt-8 mb-3">
-            3. Bài tập: Chọn từ đúng
-          </h3>
-          <div class="space-y-6" id="quiz-unit12"></div>
-        </div>
-
-        <div
-          id="practice"
-          class="page hidden bg-white p-6 rounded-lg shadow-md"
-        >
-          <h2 class="text-2xl font-bold text-gray-700 mb-4">
-            Bài Kiểm Tra Tổng Hợp (20+ câu)
-          </h2>
-          <p class="mb-6 text-gray-600">
-            Chọn đáp án đúng nhất để hoàn thành các câu sau.
-          </p>
-          <div class="space-y-6" id="practice-quiz-container"></div>
-          <div class="text-center mt-8">
-            <button
-              onclick="resetPracticeQuiz()"
-              class="bg-indigo-500 text-white font-semibold px-6 py-2 rounded-lg hover:bg-indigo-600 transition-colors"
-            >
-              Làm lại bài kiểm tra
-            </button>
-          </div>
-        </div>
-      </main>
+      </div>
     </div>
 
     <script>
-      // --- DỮ LIỆU TỪ VỰNG VÀ BÀI TẬP ---
-      const vocabData = {
-        unit9: [
-          { en: "collect stamps", vi: "sưu tầm tem" },
-          { en: "design a building", vi: "thiết kế toà nhà" },
-          { en: "decide", vi: "quyết định" },
-          { en: "discover", vi: "khám phá" },
-          { en: "scientist", vi: "nhà khoa học" },
-          { en: "mathematician", vi: "nhà toán học" },
-        ],
-        unit10: [
-          { en: "object", vi: "hiện vật" },
-          { en: "important", vi: "quan trọng" },
-          { en: "project", vi: "dự án" },
-          { en: "choose -> chose", vi: "chọn" },
-          { en: "find -> found", vi: "tìm thấy" },
-          { en: "build -> built", vi: "xây" },
-          { en: "metal", vi: "kim loại" },
-          { en: "chariot", vi: "xe ngựa kéo" },
-          { en: "empire", vi: "đế chế" },
-          { en: "banknote", vi: "ngân phiếu" },
-        ],
-        unit11: [
-          { en: "leisure activities", vi: "hoạt động giải trí" },
-          { en: "go to the concert", vi: "đi xem hoà nhạc" },
-          { en: "take out food", vi: "mua đồ ăn mang đi" },
-          { en: "stadium", vi: "sân vận động" },
-          { en: "player", vi: "cầu thủ" },
-          { en: "be interested in", vi: "thích thú, quan tâm" },
-        ],
-        unit12: [
-          { en: "airport", vi: "sân bay" },
-          { en: "miss (a flight)", vi: "nhỡ (chuyến bay)" },
-          { en: "take a taxi", vi: "bắt xe taxi" },
-          { en: "traffic jam", vi: "tắc đường" },
-          { en: "passport", vi: "hộ chiếu" },
-          { en: "luggage", vi: "hành lý" },
-          { en: "wallet", vi: "ví tiền" },
-          { en: "suitcase", vi: "va li" },
-          { en: "credit card", vi: "thẻ tín dụng" },
-          { en: "go on vacation", vi: "đi nghỉ dưỡng" },
-          { en: "on time", vi: "đúng giờ" },
-        ],
-      };
+      document.addEventListener("DOMContentLoaded", function () {
+        // --- JavaScript Functionality ---
+        const calendarDays = document.getElementById("calendar-days");
+        const monthYearDisplay = document.getElementById("month-year-display");
+        const monthSelect = document.getElementById("month-select");
+        const yearSelect = document.getElementById("year-select");
+        const prevMonthBtn = document.getElementById("prev-month-btn");
+        const nextMonthBtn = document.getElementById("next-month-btn");
 
-      const quizData = {
-        unit9: [
-          {
-            sentence: "I (visit) _______ my grandparents last week.",
-            answer: "visited",
-          },
-          {
-            sentence: "She (not watch) _______ TV yesterday.",
-            answer: "didn't watch",
-          },
-          { sentence: "They (be) _______ very happy.", answer: "were" },
-        ],
-        unit10: [
-          {
-            sentence: "The Romans (build) _______ many roads.",
-            answer: "built",
-          },
-          {
-            sentence: "I (find) _______ my keys under the sofa.",
-            answer: "found",
-          },
-          {
-            sentence: "She (choose) _______ the red dress for the party.",
-            answer: "chose",
-          },
-        ],
-        unit11: [
-          {
-            sentence: "We enjoy (listen) _______ to music.",
-            answer: "listening",
-          },
-          { sentence: "He hates (do) _______ the housework.", answer: "doing" },
-          { sentence: "Do you like (play) _______ soccer?", answer: "playing" },
-        ],
-      };
+        const modal = document.getElementById("scheduleModal");
+        const modalTitle = document.getElementById("modal-title");
+        const modalBody = document.getElementById("modal-body");
+        const notesInput = document.getElementById("notes-input");
 
-      // BÀI KIỂM TRA TỔNG HỢP MỚI VỚI NHIỀU CÂU HỎI
-      const practiceQuizData = [
-        // Unit 9: Past Simple (was/were, V-ed)
-        {
-          question: "My friends _______ at the party last night.",
-          options: ["was", "is", "were", "are"],
-          answer: "were",
-        },
-        {
-          question: "I _______ stamps when I was a child.",
-          options: ["collect", "collected", "am collecting", "collects"],
-          answer: "collected",
-        },
-        {
-          question: "She _______ to our question; she just smiled.",
-          options: [
-            "didn't answer",
-            "not answer",
-            "don't answer",
-            "answered not",
-          ],
-          answer: "didn't answer",
-        },
-        // Unit 10: Past Simple (irregular verbs), vocab
-        {
-          question: "The ancient Egyptians _______ the great pyramids.",
-          options: ["build", "built", "have built", "are building"],
-          answer: "built",
-        },
-        {
-          question: "He _______ his wallet on the bus yesterday.",
-          options: ["loses", "lost", "is losing", "has lost"],
-          answer: "lost",
-        },
-        {
-          question: "A _______ is a very old and valuable thing from history.",
-          options: ["banknote", "project", "object", "chariot"],
-          answer: "object",
-        },
-        {
-          question:
-            "The ancient Roman _______ was one of the most powerful in history.",
-          options: ["empire", "stadium", "metal", "player"],
-          answer: "empire",
-        },
-        // Unit 11: V-ing, vocab
-        {
-          question: "I really enjoy _______ sports with my friends.",
-          options: ["to watch", "watch", "watching", "watched"],
-          answer: "watching",
-        },
-        {
-          question: "He is a famous football _______ for the national team.",
-          options: ["player", "scientist", "hero", "character"],
-          answer: "player",
-        },
-        {
-          question: "What kind of _______ do you do in your free time?",
-          options: [
-            "take out food",
-            "leisure activities",
-            "go out",
-            "find out",
-          ],
-          answer: "leisure activities",
-        },
-        {
-          question: "My sister hates _______ up early on weekends.",
-          options: ["get", "to get", "getting", "got"],
-          answer: "getting",
-        },
-        // Unit 12: Present Continuous, vocab
-        {
-          question: "Please be quiet. I _______ to the radio.",
-          options: ["listen", "listened", "am listening", "was listening"],
-          answer: "am listening",
-        },
-        {
-          question: "Look! That man _______ to open your car door!",
-          options: ["tries", "tried", "is trying", "was trying"],
-          answer: "is trying",
-        },
-        {
-          question:
-            "You must show your _______ before you can get on the plane.",
-          options: ["passport", "luggage", "suitcase", "credit card"],
-          answer: "passport",
-        },
-        {
-          question:
-            "The traffic is terrible. I'm afraid we won't arrive _______.",
-          options: ["in time", "at time", "on time", "of time"],
-          answer: "on time",
-        },
-        // General Grammar & Mixed Questions
-        {
-          question: "_______ you see the new action movie last Friday?",
-          options: ["Do", "Did", "Are", "Were"],
-          answer: "Did",
-        },
-        {
-          question: "This isn't my bag. It must be _______.",
-          options: ["her", "she", "hers", "she's"],
-          answer: "hers",
-        },
-        {
-          question: "Could you pass _______ the salt, please?",
-          options: ["I", "my", "me", "mine"],
-          answer: "me",
-        },
-        {
-          question: "My mother _______ dinner in the kitchen right now.",
-          options: ["cooks", "cooked", "is cooking", "was cooking"],
-          answer: "is cooking",
-        },
-        {
-          question: "Leonardo da Vinci _______ the Mona Lisa.",
-          options: ["paints", "painted", "is painting", "has painted"],
-          answer: "painted",
-        },
-        {
-          question: "I have too much _______ to carry by myself. Can you help?",
-          options: ["wallet", "passport", "luggage", "traffic"],
-          answer: "luggage",
-        },
-        {
-          question:
-            "He _______ for his keys for 10 minutes and finally _______ them under the bed.",
-          options: [
-            "looked / found",
-            "looked / finded",
-            "was looking / find",
-            "looked / was finding",
-          ],
-          answer: "looked / found",
-        },
-      ];
+        let currentDayKey = "";
+        let today = new Date();
+        let currentMonth = today.getMonth();
+        let currentYear = today.getFullYear();
 
-      const unit12QuizData = [
-        {
-          question: "You need a _______ to fly to another country.",
-          options: ["passport", "wallet", "suitcase"],
-          answer: "passport",
-        },
-        {
-          question: "I packed all my clothes in a large _______.",
-          options: ["bag", "suitcase", "wallet"],
-          answer: "suitcase",
-        },
-        {
-          question: "We arrived at the station just _______ for the train.",
-          options: ["on time", "in time", "at time"],
-          answer: "on time",
-        },
-      ];
+        const monthNames = [
+          "Tháng 1",
+          "Tháng 2",
+          "Tháng 3",
+          "Tháng 4",
+          "Tháng 5",
+          "Tháng 6",
+          "Tháng 7",
+          "Tháng 8",
+          "Tháng 9",
+          "Tháng 10",
+          "Tháng 11",
+          "Tháng 12",
+        ];
 
-      // --- HÀM TẠO GIAO DIỆN ---
-      function createFlashcard(word) {
-        const card = document.createElement("div");
-        card.className =
-          "flashcard bg-white shadow rounded-lg cursor-pointer h-32";
-        card.style.perspective = "1000px";
-        const cardInner = document.createElement("div");
-        cardInner.className = "flashcard-inner";
-        const cardFront = document.createElement("div");
-        cardFront.className = "flashcard-front bg-blue-100 text-blue-800 p-2";
-        cardFront.innerHTML = `<span class="font-semibold text-lg">${word.en}</span>`;
-        const cardBack = document.createElement("div");
-        cardBack.className = "flashcard-back bg-green-100 text-green-800 p-2";
-        cardBack.innerHTML = `<span class="font-semibold text-lg">${word.vi}</span>`;
-        cardInner.appendChild(cardFront);
-        cardInner.appendChild(cardBack);
-        card.appendChild(cardInner);
-        card.addEventListener("click", () => card.classList.toggle("flipped"));
-        return card;
-      }
+        // --- Dữ liệu thời khóa biểu ---
+        const scheduleData = {
+          weekday: `
+                <div class="schedule-item"><span class="time">07:00 - 12:00</span><span class="activity">📚 Học trên trường</span></div>
+                <div class="schedule-item"><span class="time">12:00 - 13:30</span><span class="activity">🍕 Ăn trưa & Nghỉ ngơi</span></div>
+                <div class="schedule-item"><span class="time">13:30 - 15:30</span><span class="activity">✍️ Làm bài tập & Ôn bài</span></div>
+                <div class="schedule-item"><span class="time">15:30 - 16:00</span><span class="activity">☕ Nghỉ giải lao</span></div>
+                <div class="schedule-item"><span class="time">16:00 - 18:00</span><span class="activity">💻 Học IT (Lý thuyết)</span></div>
+                <div class="schedule-item"><span class="time">18:00 - 19:00</span><span class="activity">🍜 Ăn tối & Thư giãn</span></div>
+                <div class="schedule-item"><span class="time">19:00 - 22:00</span><span class="activity">🎮 Luyện tập Game (Rank/Scrim)</span></div>
+                <div class="schedule-item"><span class="time">22:00 - 23:00</span><span class="activity">👨‍💻 Học IT (Thực hành)</span></div>
+                <div class="schedule-item"><span class="time">Sau 23:00</span><span class="activity">🌙 Thư giãn & Chuẩn bị ngủ</span></div>
+            `,
+          sunday: `
+                <div class="schedule-item"><span class="time">Sáng</span><span class="activity">🚀 Tăng tốc IT hoặc 🎮 Luyện game chuyên sâu</span></div>
+                <div class="schedule-item"><span class="time">Chiều</span><span class="activity">🧘‍♂️ Dành thời gian nghỉ ngơi, ra ngoài hoặc cho gia đình</span></div>
+                <div class="schedule-item"><span class="time">Tối</span><span class="activity">📖 Chuẩn bị bài vở, kế hoạch cho tuần mới</span></div>
+            `,
+        };
 
-      function createFillInBlankQuestion(question, index) {
-        const container = document.createElement("div");
-        container.className = "quiz-question bg-gray-50 p-4 rounded-lg";
-        const questionText = document.createElement("p");
-        questionText.textContent = `${index + 1}. ${question.sentence}`;
-        const input = document.createElement("input");
-        input.type = "text";
-        input.className =
-          "mt-2 w-full md:w-1/2 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500";
-        input.placeholder = "Nhập câu trả lời...";
-        const button = document.createElement("button");
-        button.textContent = "Kiểm tra";
-        button.className =
-          "ml-0 md:ml-2 mt-2 md:mt-0 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition";
-        const feedback = document.createElement("p");
-        feedback.className = "mt-2 font-medium";
-        button.addEventListener("click", () => {
-          if (
-            input.value.trim().toLowerCase() === question.answer.toLowerCase()
-          ) {
-            feedback.textContent = "Chính xác!";
-            feedback.className = "mt-2 font-medium text-green-600";
-          } else {
-            feedback.textContent = `Sai rồi! Đáp án đúng là: ${question.answer}`;
-            feedback.className = "mt-2 font-medium text-red-600";
-          }
-        });
-        container.appendChild(questionText);
-        container.appendChild(input);
-        container.appendChild(button);
-        container.appendChild(feedback);
-        return container;
-      }
-
-      function createMultipleChoiceQuestion(data, index, containerId) {
-        const container = document.createElement("div");
-        container.className =
-          "practice-question bg-gray-50 p-4 rounded-lg shadow-sm";
-        const questionText = document.createElement("p");
-        questionText.className = "font-semibold mb-3";
-        questionText.textContent = `${index + 1}. ${data.question}`;
-        container.appendChild(questionText);
-        const optionsContainer = document.createElement("div");
-        optionsContainer.className = "space-y-2";
-        container.appendChild(optionsContainer);
-        const feedback = document.createElement("p");
-        feedback.className = "mt-3 font-medium text-sm";
-        container.appendChild(feedback);
-        data.options.forEach((option) => {
-          const optionLabel = document.createElement("label");
-          optionLabel.className =
-            "block p-3 rounded-md border border-gray-200 cursor-pointer quiz-option transition-colors duration-200";
-          const optionInput = document.createElement("input");
-          optionInput.type = "radio";
-          optionInput.name = `${containerId}-question-${index}`;
-          optionInput.value = option;
-          optionInput.className = "mr-3";
-          optionInput.addEventListener("change", () => {
-            optionsContainer.querySelectorAll("label").forEach((lbl) => {
-              lbl.classList.remove(
-                "bg-green-200",
-                "border-green-400",
-                "bg-red-200",
-                "border-red-400"
-              );
-            });
-            if (optionInput.value === data.answer) {
-              optionLabel.classList.add("bg-green-200", "border-green-400");
-              feedback.textContent = "Chính xác! Tuyệt vời!";
-              feedback.className = "mt-3 font-medium text-sm text-green-700";
-            } else {
-              optionLabel.classList.add("bg-red-200", "border-red-400");
-              feedback.textContent = `Chưa đúng. Đáp án đúng là "${data.answer}".`;
-              feedback.className = "mt-3 font-medium text-sm text-red-700";
-            }
+        function initCalendar() {
+          monthNames.forEach((month, index) => {
+            const option = document.createElement("option");
+            option.value = index;
+            option.textContent = month;
+            monthSelect.appendChild(option);
           });
-          optionLabel.appendChild(optionInput);
-          optionLabel.appendChild(document.createTextNode(option));
-          optionsContainer.appendChild(optionLabel);
-        });
-        return container;
-      }
 
-      function renderPracticeQuiz() {
-        const practiceContainer = document.getElementById(
-          "practice-quiz-container"
-        );
-        practiceContainer.innerHTML = ""; // Xóa bài cũ
-        // Trộn câu hỏi để mỗi lần làm lại sẽ khác
-        const shuffledQuestions = practiceQuizData.sort(
-          () => 0.5 - Math.random()
-        );
-        shuffledQuestions.forEach((q, index) =>
-          practiceContainer.appendChild(
-            createMultipleChoiceQuestion(q, index, "practice")
-          )
-        );
-      }
-
-      function resetPracticeQuiz() {
-        renderPracticeQuiz();
-        showPage("practice");
-      }
-
-      // --- HÀM KHỞI TẠO VÀ ĐIỀU KHIỂN ---
-      function showPage(pageId) {
-        document
-          .querySelectorAll(".page")
-          .forEach((p) => p.classList.add("hidden"));
-        document.getElementById(pageId).classList.remove("hidden");
-        document.querySelectorAll(".nav-button").forEach((b) => {
-          b.classList.remove("active");
-          if (b.getAttribute("onclick").includes(`'${pageId}'`)) {
-            b.classList.add("active");
+          const currentYearValue = today.getFullYear();
+          for (let i = currentYearValue - 5; i <= currentYearValue + 5; i++) {
+            const option = document.createElement("option");
+            option.value = i;
+            option.textContent = i;
+            yearSelect.appendChild(option);
           }
-        });
-      }
 
-      document.addEventListener("DOMContentLoaded", () => {
-        // Tạo flashcards
-        for (const unit in vocabData) {
-          const container = document.getElementById(`vocab-${unit}`);
-          if (container) {
-            vocabData[unit].forEach((word) =>
-              container.appendChild(createFlashcard(word))
-            );
+          prevMonthBtn.addEventListener("click", () => changeMonth(-1));
+          nextMonthBtn.addEventListener("click", () => changeMonth(1));
+          monthSelect.addEventListener("change", jumpToDate);
+          yearSelect.addEventListener("change", jumpToDate);
+
+          renderCalendar(currentMonth, currentYear);
+        }
+
+        function renderCalendar(month, year) {
+          calendarDays.innerHTML = "";
+          monthSelect.value = month;
+          yearSelect.value = year;
+          monthYearDisplay.textContent = `${monthNames[month]}, ${year}`;
+
+          const firstDayOfMonth = new Date(year, month, 1).getDay();
+          const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+          for (let i = 0; i < firstDayOfMonth; i++) {
+            const emptyCell = document.createElement("div");
+            emptyCell.classList.add("day", "empty");
+            calendarDays.appendChild(emptyCell);
+          }
+
+          for (let i = 1; i <= daysInMonth; i++) {
+            const dayCell = document.createElement("div");
+            const dayNumber = document.createElement("span");
+            dayNumber.className = "day-number";
+            dayNumber.textContent = i;
+            dayCell.appendChild(dayNumber);
+            dayCell.classList.add("day");
+
+            const date = new Date(year, month, i);
+            const dayOfWeek = date.getDay();
+
+            if (dayOfWeek === 0) dayCell.classList.add("sunday");
+
+            if (
+              i === today.getDate() &&
+              month === today.getMonth() &&
+              year === today.getFullYear()
+            ) {
+              dayCell.classList.add("today");
+            }
+
+            dayCell.addEventListener("click", () => showSchedule(date));
+            calendarDays.appendChild(dayCell);
           }
         }
 
-        // Tạo câu hỏi quiz điền từ
-        for (const unit in quizData) {
-          const container = document.getElementById(`quiz-${unit}`);
-          if (container) {
-            quizData[unit].forEach((q, index) =>
-              container.appendChild(createFillInBlankQuestion(q, index))
-            );
+        function changeMonth(change) {
+          currentMonth += change;
+          if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+          } else if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
           }
+          renderCalendar(currentMonth, currentYear);
         }
 
-        // Tạo câu hỏi trắc nghiệm cho Unit 12
-        const quizContainer12 = document.getElementById("quiz-unit12");
-        unit12QuizData.forEach((q, index) =>
-          quizContainer12.appendChild(
-            createMultipleChoiceQuestion(q, index, "unit12")
-          )
-        );
+        function jumpToDate() {
+          currentMonth = parseInt(monthSelect.value);
+          currentYear = parseInt(yearSelect.value);
+          renderCalendar(currentMonth, currentYear);
+        }
 
-        // Tạo câu hỏi trắc nghiệm tổng hợp
-        renderPracticeQuiz();
+        window.showSchedule = function (date) {
+          const dayOfMonth = date.getDate();
+          const dayOfWeek = date.getDay();
+          const dayOfWeekName = [
+            "Chủ Nhật",
+            "Thứ 2",
+            "Thứ 3",
+            "Thứ 4",
+            "Thứ 5",
+            "Thứ 6",
+            "Thứ 7",
+          ][dayOfWeek];
 
-        showPage("home");
+          currentDayKey = `${date.getFullYear()}_${date.getMonth()}_${date.getDate()}`;
+          modalTitle.innerText = `Lịch trình ${dayOfWeekName}, ngày ${dayOfMonth}`;
+
+          modalBody.innerHTML =
+            dayOfWeek === 0 || dayOfWeek === 6
+              ? scheduleData.sunday
+              : scheduleData.weekday;
+
+          notesInput.value = localStorage.getItem(currentDayKey) || "";
+          modal.classList.add("show");
+        };
+
+        window.closeModal = function () {
+          if (currentDayKey) {
+            localStorage.setItem(currentDayKey, notesInput.value);
+          }
+          modal.classList.remove("show");
+        };
+
+        window.onclick = function (event) {
+          if (event.target == modal) closeModal();
+        };
+        window.onkeydown = function (event) {
+          if (event.key === "Escape" && modal.classList.contains("show"))
+            closeModal();
+        };
+
+        initCalendar();
       });
     </script>
   </body>
